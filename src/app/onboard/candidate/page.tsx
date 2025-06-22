@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import Image from "next/image";
 import CandidateMapPicker from "./CandidateMapPicker";
 
 export default function CandidateOnboarding() {
@@ -169,7 +170,7 @@ export default function CandidateOnboarding() {
             <div className="flex flex-col gap-2">
                 <label className="text-sm font-medium text-gray-700">Profile Photo</label>
                 {photoPreview && (
-                  <img src={photoPreview} alt="Profile Preview" className="w-24 h-24 rounded-full mx-auto my-2 object-cover" />
+                  <Image src={photoPreview} alt="Profile Preview" width={96} height={96} className="w-24 h-24 rounded-full mx-auto my-2 object-cover" />
                 )}
                 <label className="w-full flex flex-col items-center px-4 py-3 bg-white text-indigo-600 rounded-lg shadow-sm tracking-wide uppercase border border-indigo-500 cursor-pointer hover:bg-indigo-600 hover:text-white">
                     <svg className="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

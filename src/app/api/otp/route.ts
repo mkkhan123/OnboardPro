@@ -38,8 +38,4 @@ export async function POST(req: NextRequest) {
   });
 
   return NextResponse.json({ success: true });
-}
-
-export function verifyOtp(email: string, otp: string) {
-  return otpStore[email] === otp;
 } 
