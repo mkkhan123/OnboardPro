@@ -1,8 +1,18 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  button {
+    @apply cursor-pointer;
+  }
+}
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --foreground-rgb: 0, 0, 0;
 }
 
 @theme inline {
