@@ -9,6 +9,7 @@ export default function ClientOnboarding() {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const router = useRouter();
 
