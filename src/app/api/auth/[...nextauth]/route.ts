@@ -22,7 +22,7 @@ const handler = NextAuth({
     strategy: "jwt",
   },
   pages: {
-    signIn: "/auth/login",
+    signIn: "/onboard/candidate",
   },
 });
 

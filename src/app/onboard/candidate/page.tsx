@@ -17,6 +17,7 @@ export default function CandidateOnboarding() {
   });
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +52,7 @@ export default function CandidateOnboarding() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     setError("");
 
     const finalData = new FormData();
@@ -96,6 +98,7 @@ export default function CandidateOnboarding() {
         setError("An unexpected error occurred.");
       }
     }
+    setLoading(false);
   };
 
   return (
@@ -188,8 +191,18 @@ export default function CandidateOnboarding() {
                 <button type="button" onClick={() => setStep(1)} className="flex-1 bg-gray-300 text-gray-800 py-2 rounded hover:bg-gray-400 transition">
                     Back
                 </button>
-                <button type="submit" className="flex-1 bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition">
-                    Submit
+                <button type="submit" className="flex-1 bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition" disabled={loading}>
+                  {loading ? (
+                    <span className="flex items-center justify-center">
+                      <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                      </svg>
+                      Loading...
+                    </span>
+                  ) : (
+                    "Submit"
+                  )}
                 </button>
             </div>
           </form>

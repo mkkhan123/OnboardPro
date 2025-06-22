@@ -11,6 +11,9 @@ export default function ClientOnboarding() {
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [verifyLoading, setVerifyLoading] = useState(false);
   const router = useRouter();
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,12 +26,14 @@ export default function ClientOnboarding() {
 
   async function handleSendOtp(e: React.FormEvent) {
     e.preventDefault();
+    setOtpLoading(true);
     // Call the OTP API
     const res = await fetch('/api/otp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
     });
+    setOtpLoading(false);
     if (res.ok) {
       setStep("otp");
       alert("OTP sent to your email!");
@@ -39,12 +44,14 @@ export default function ClientOnboarding() {
 
   async function handleVerifyOtp(e: React.FormEvent) {
     e.preventDefault();
+    setVerifyLoading(true);
     // Call the OTP verification API
     const res = await fetch('/api/otp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, otp, action: 'verify' }),
     });
+    setVerifyLoading(false);
     const data = await res.json();
     if (data.success) {
       setStep("form");
@@ -66,7 +73,19 @@ export default function ClientOnboarding() {
             onChange={e => setEmail(e.target.value)}
             required
           />
-          <button type="submit" className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">Send OTP</button>
+          <button type="submit" className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition" disabled={otpLoading}>
+            {otpLoading ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                </svg>
+                Sending...
+              </span>
+            ) : (
+              "Send OTP"
+            )}
+          </button>
         </form>
       )}
       {step === "otp" && (
@@ -79,15 +98,35 @@ export default function ClientOnboarding() {
             onChange={e => setOtp(e.target.value)}
             required
           />
-          <button type="submit" className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">Verify OTP</button>
+          <button type="submit" className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition" disabled={verifyLoading}>
+            {verifyLoading ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                </svg>
+                Verifying...
+              </span>
+            ) : (
+              "Verify OTP"
+            )}
+          </button>
         </form>
       )}
       {step === "form" && (
         <form
           className="flex flex-col gap-4 w-full max-w-sm bg-gray-50 p-6 rounded shadow mt-8"
-          onSubmit={e => {
+          onSubmit={async e => {
             e.preventDefault();
+            setLoading(true);
             // TODO: handle form data, including logoFile
+            // Create session after onboarding using OTP
+            await fetch('/api/auth/otp-session', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email }),
+            });
+            localStorage.setItem('onboardingComplete', 'true');
             router.push("/dashboard");
           }}
         >
@@ -107,7 +146,19 @@ export default function ClientOnboarding() {
             </label>
           </div>
           <ClientMapPicker />
-          <button type="submit" className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition mt-2">Submit</button>
+          <button type="submit" className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition mt-2" disabled={loading}>
+            {loading ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                </svg>
+                Loading...
+              </span>
+            ) : (
+              "Submit"
+            )}
+          </button>
         </form>
       )}
     </div>

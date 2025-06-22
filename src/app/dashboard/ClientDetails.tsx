@@ -4,6 +4,7 @@ const clients = [
   { id: 1, name: 'Tech Solutions Inc.', industry: 'Technology' },
   { id: 2, name: 'Innovate LLC', industry: 'Consulting' },
   { id: 3, name: 'HealthFirst Corp.', industry: 'Healthcare' },
+  { id: 4, name: 'ESolution Tech', industry: 'E-Commerce' },
 ];
 
 interface ClientDetailsProps {

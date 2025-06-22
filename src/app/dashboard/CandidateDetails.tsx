@@ -4,7 +4,9 @@ const candidates = [
   { id: 1, name: 'John Doe', status: 'Sourced' },
   { id: 2, name: 'Jane Smith', status: 'Interviewing' },
   { id: 3, name: 'Peter Jones', status: 'Offered' },
-  { id: 4, name: 'Mary Williams', status: 'Hired' },
+  { id: 4, name: 'Peter Williams', status: 'Hired' },
+  { id: 5, name: 'John Smith', status: 'Hired' },
+  { id: 6, name: 'David Williams', status: 'Hired' },
 ];
 
 interface CandidateDetailsProps {
